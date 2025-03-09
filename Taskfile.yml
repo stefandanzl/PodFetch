@@ -3,26 +3,31 @@ version: '3'
 
 tasks:
   default:
-    deps: [build-rust, build-ui]
+    deps: [build-ui]
 
   install:
-    deps: [install-rust, install-ui]
+    deps: [install-ui]
 
   install-rust:
+    platforms: [linux]
     cmds:
     # File just needs to be there
       - touch static/index.html
-      - cmd: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        platforms: [linux]
+      - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+      - rustup target add x86_64-pc-windows-gnu
+      - sudo apt update
+      - sudo apt install mingw-w64
       
   install-ui:
     dir: ui
     cmds:
       - pnpm install
 
-  build-rust:
+  build-rust-win:
     cmds:
-      - cargo run --color=always --package podfetch --bin podfetch
+      #- cargo run --color=always --package podfetch --bin podfetch
+      - cargo build --color=always --package podfetch --bin podfetch.exe --target x86_64-pc-windows-gnu --release
+      # OPTIONAL set env variable BACKEND_URL=
   build-ui:
     dir: ui
     cmds:
