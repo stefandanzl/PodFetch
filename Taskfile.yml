@@ -1,0 +1,29 @@
+# https://taskfile.dev
+version: '3'
+
+tasks:
+  default:
+    deps: [build-rust, build-ui]
+
+  install:
+    deps: [install-rust, install-ui]
+
+  install-rust:
+    cmds:
+    # File just needs to be there
+      - touch static/index.html
+      - cmd: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        platforms: [linux]
+      
+  install-ui:
+    dir: ui
+    cmds:
+      - pnpm install
+
+  build-rust:
+    cmds:
+      - cargo run --color=always --package podfetch --bin podfetch
+  build-ui:
+    dir: ui
+    cmds:
+      - pnpm run dev
