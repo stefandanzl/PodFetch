@@ -1,23 +1,41 @@
 # https://taskfile.dev
-version: '3'
+version: "3"
 
 tasks:
   default:
+    deps: [run-ui, run-rust]
+
+  build:
     deps: [build-ui]
 
   install:
     deps: [install-ui]
 
+  run-ui:
+    dir: ui
+    cmds:
+      - pnpm run dev
+
+  run-rust:
+    #dir: target
+    cmds:
+      - cmd: ./target/podfetch
+        platforms: [linux]
+
   install-rust:
     platforms: [linux]
     cmds:
-    # File just needs to be there
+      # File just needs to be there
       - touch static/index.html
       - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
       - rustup target add x86_64-pc-windows-gnu
       - sudo apt update
       - sudo apt install mingw-w64
-      
+      - echo "deb http://security.debian.org/debian-security bullseye-security main" | sudo tee /etc/apt/sources.list.d/bullseye-security.list
+      - sudo apt update
+      - sudo apt install libssl1.1
+      - sudo apt install libpq5
+
   install-ui:
     dir: ui
     cmds:
