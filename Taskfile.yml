@@ -23,10 +23,15 @@ tasks:
     cmds:
       - pnpm install
 
+  build-rust:
+    cmds:
+      - cargo build --color=always --package podfetch --bin podfetch --release
+
   build-rust-win:
     cmds:
       #- cargo run --color=always --package podfetch --bin podfetch
-      - cargo build --color=always --package podfetch --bin podfetch.exe --target x86_64-pc-windows-gnu --release
+      - cargo build --color=always --package podfetch --bin podfetch --target x86_64-pc-windows-gnu --release
+      #- cross build --color=always --package podfetch --bin podfetch.exe --target x86_64-pc-windows-gnu --release
       # OPTIONAL set env variable BACKEND_URL=
   build-ui:
     dir: ui
